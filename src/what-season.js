@@ -16,18 +16,20 @@ function getSeason(date) {
     return 'Unable to determine the time of year!';
   }
 
-  // blocking "enemy scouts"
-  if (
-    Object.prototype.toString.call(date) !== '[object Date]' ||
-    isNaN(date.getTime()) ||
-    Object.keys(date).length > 0
-  ) {
+  try {
+    // Calling .getTime() on a fake object
+    const time = date.getTime();
+    
+    if (typeof time !== 'number' || isNaN(time)) {
+      throw new Error('Invalid date!');
+    }
+  } catch (err) {
+    // Catches thrown errors and native TypeErrors from fake dates
     throw new Error('Invalid date!');
   }
 
   const month = date.getMonth();
 
-  // Months to seasons
   if (month === 11 || month === 0 || month === 1) {
     return 'winter';
   } else if (month >= 2 && month <= 4) {
